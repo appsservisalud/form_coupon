@@ -8,70 +8,180 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
     <!-- css personal-->
-    <link rel="stylesheet" href="/CSS/main.css">
+    <link rel="stylesheet" href="CSS/main.css">
     <title>Form</title>
 </head>
 <body>
   <div class="container">
-    <form action="" method="post">
-        <label>Nombre:</label>
-        <input type="text" id="name" class="field" required><br/>
+    <form action="" id="form">
+        <label>Escribe el precio de tu producto</label>
+        <input type="number" id="InputPrice" class="field" required><br/>
 
-        <label>Correo electrónico:</label>
-        <input type="email" id="email" class="field" required><br/>
+        <label>Escribe el nombre de tu cupon de descuento:</label>
+        <input type="InputCoupon" id="InputCoupon" class="field" required><br/>
 
-        <label>Asunto:</label>
-        <input type="text" id="asunto" class="field" required><br/>
-
-        <label>Mensaje:</label>
-        <textarea class="field" id="mensaje" required></textarea><br/>
-
-        <p class="center-content"><button type="submit" id="submit" onclick="send_data()"class="btn btn-success">Enviar datos</button></p>
-        <div id="msgs"></div>
+        <p class="center-content"><button type="submit" id="submit" class="btn btn-success">Enviar datos</button></p>
+        <div id="msg"></div>
     </form>
     
 </div>
 
 <script>
-    function send_data()
-    {   
 
-        event.preventDefault();
 
-        var inputs = document.getElementsByTagName("input")
-        var textareas = document.getElementsByTagName("textarea")
-        var alert = document.createElement("div")
-    
-        var usuario = {name : document.getElementById("name"),
-                       email : document.getElementById("email"),
-                       asunto : document.getElementById("asunto"),
-                       mensaje : document.getElementById("mensaje")
+document.getElementById('form').addEventListener('submit',function(e)
+
+         {
+
+        e.preventDefault();
+
+        var inputs = document.getElementsByTagName('input')
+
+        const User = {price : document.getElementById("InputPrice").value,
+                        coupon: document.getElementById("InputCoupon").value,
                       }
+        
+        const Coupons = [
+        {
+            name: "JuanDC_es_Batman",
+            discount: 15,
+        },
+        {
+            name: "pero_no_le_digas_a_nadie",
+            discount: 30,
+        },
+        {
+            name: "es_un_secreto",
+            discount: 25,
+        },
+        ];
 
-        console.log(usuario.name.value,usuario.email.value,usuario.asunto.value,usuario.mensaje.value)
+
+        function Calculate_Discounted_Price(Price,Discount)
+        {
+            const Price_less_Discount = 100 - Discount
+            const Price_With_Discount = (Price * Price_less_Discount)/100
+            
+            return Price_With_Discount
+
+
+        }
+
+        const Is_Coupon_Value_Valid = function (Coupon){
+            return Coupon.name === User.coupon;
+        }
+
+        const UserCoupon = Coupons.find(Is_Coupon_Value_Valid);
+
+        if(!UserCoupon){
+            alert("El cupon " + User.coupon + " no es válido");
+        }else
+        
+        {
+
+            const Discount = UserCoupon.discount;
+
+            const Price = User.price
+
+
+            const Price_With_Discount = Calculate_Discounted_Price(Price,Discount);
+
+            const msg = document.getElementById("msg");
+            msg.innerHTML = "El precio con descuento es: $" + Price_With_Discount;
+            
+        }
+
+
+        for(var i = 0;i<inputs.length;i++)
+        {
+            inputs[i].value = '';
+        }
+  
+        }
+
+)
+
+/*
+
+
+/*
+document.getElementById('form').addEventListener('submit',function(e)
+
+         {
+
+        e.preventDefault();
+
+        var inputs = document.getElementsByTagName('input')
+
+        const User = {price : document.getElementById("InputPrice").value,
+                        coupon: document.getElementById("InputCoupon").value,
+                      }
+        
+        const Coupons = [
+                        {
+                            name: "JuanDC_es_Batman",
+                            discount: 15,
+                        },
+                        {
+                            name: "pero_no_le_digas_a_nadie",
+                            discount: 30,
+                        },
+                        {
+                            name: "es_un_secreto",
+                            discount: 25,
+                        },
+                        ];
         
         for(var i = 0;i<inputs.length;i++)
         {
             inputs[i].value = '';
         }
 
-        for(var i = 0;i<textareas.length;i++)
-        {   
-            if(textareas[i].value != ''){
-                textareas[i].value = '';
-            }
+        function Calculate_Discounted_Price(Price,Discount)
+        {
+            const Price_less_Discount = 100 - Discount
+            const Price_With_Discount = (Price * Price_less_Discount)/100
             
+            return Price_With_Discount
+
+
         }
 
-        alert.innerHTML = `<div class="alert alert-primary" role="alert">
-        Se han enviado sus datos
-</div>`
 
- 
+        console.log(Calculate_Discounted_Price(100,10))
+    }
 
-        document.getElementById("msgs").appendChild(alert)
+
+        /*
+
+        const Is_Coupon_Value_Valid = function (Coupon){
+            return Coupon.name === User.coupon;
+        }
+
+        const UserCoupon = Coupons.find(Is_Coupon_Value_Valid);
+
+        if(!UserCoupon){
+            alert("El cupon" + User.coupon + "no es válido");
+
+        }else
+        
+        {
+
+            const Discount = User.Discount;
+
+            const Price = User.price
+
+            const Price_With_Discount = Calculate_Discounted_Price(Price,Discount);
+
+            const msg = document.getElementById("msg");
+            msg.innerHTML = "El precio con descuento es: $" + Price_With_Discount;
+        }
+
+        
     
     }
+
+    */
 
 </script>
 </body>
